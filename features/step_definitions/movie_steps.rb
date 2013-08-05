@@ -37,10 +37,18 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
     end
     save_and_open_page
   end
-
   #end # gets array of the ratings
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
+end
 
+Then /I should (not)? see movies with ratings: (.*)/ do |not, rating_list|
+  regexp = Regexp.new(regexp)
+
+  if page.respond_to? :should
+    page.should have_xpath('//*', :text => regexp)
+  else
+    assert page.has_xpath?('//*', :text => regexp)
+  end
 end
