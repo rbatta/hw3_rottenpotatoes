@@ -12,9 +12,9 @@ end
 #   on the same page
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
-  #  ensure that that e1 occurs before e2.
-  #  page.body is the entire content of the page as a string.
-  flunk "Unimplemented"
+  x = find("tr", :text => e1)
+  y = find("tr", :text => e2)
+  assert x.path.match(/\d/)[0] < y.path.match(/\d/)[0]
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -22,33 +22,36 @@ end
 #  "When I check the following ratings: G"
 
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-  
-  debugger
+
   if !uncheck
-    rating_list.split(', ').each do |x|
-      #word = "ratings_#{x}"
-      #check(word)
-      step("I check \"ratings_#{x}\"") 
-    end
+    rating_list.split(', ').each { |x| step("I check \"ratings_#{x}\"") }
   else
-    rating_list.split(', ').each do |x|
-      step("I uncheck \"ratings_#{x}\"")
-      #uncheck("ratings_#{x}")
-    end
-    save_and_open_page
+    rating_list.split(', ').each { |x| uncheck("ratings_#{x}") }
   end
-  #end # gets array of the ratings
-  # HINT: use String#split to split up the rating_list, then
-  #   iterate over the ratings and reuse the "When I check..." or
-  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
+ 
 end
 
-Then /I should (not)? see movies with ratings: (.*)/ do |not, rating_list|
-  regexp = Regexp.new(regexp)
+Then /I should( not)? see movies with ratings: (.*)/ do |shnot, rating_list|
 
-  if page.respond_to? :should
-    page.should have_xpath('//*', :text => regexp)
+  if !shnot
+    x = rating_list.split(', ')
+    all('tr/td[2]').each { |td| x.should include td.text }
   else
-    assert page.has_xpath?('//*', :text => regexp)
+    x = rating_list.split(', ') 
+    all('#movies tr/td[2]').each { |td| x.should_not include td.text }
   end
+  # incl/exc the values of ratings from the list that i want
+  # must be array because include searches the text of a string and not each element
+
 end
+
+#page.find(:xpath, '//tr', :text => e1)
+#x = find("tr", :text => e1)
+#y = find("tr", :text => e2)
+#assert x.path.match(/\d/)[0] < y.path....
+#element1 = page.find(:xpath, '//tr', :text => e1).path.gsub(/\D/,'').to_i
+#movies = all("table#movies tbody tr")
+#movies.index(e1)
+#idx = movies.index(e1)
+# movies[idx+1].should eql(e2)
+#page.all('#movies tbody/tr').count.should == Movie.count #eql(Movie.all.count) works?
