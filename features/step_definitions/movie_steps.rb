@@ -2,10 +2,8 @@
 
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
-    Movie.create!(movie) # each returned element will be a hash whose key is the table header.
-    # you should arrange to add that movie to the database here.
+    Movie.create!(movie) 
   end
-  #flunk "Unimplemented"
 end
 
 # Make sure that one string (regexp) occurs before or after another one
@@ -22,25 +20,28 @@ end
 #  "When I check the following ratings: G"
 
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-  #debugger
-  if page.all('tbody/tr').count == 0
+  if page.all('tbody/tr').count == 0  # if page is empty, flunk
     flunk
   end
+
   if !uncheck
     rating_list.split(', ').each { |x| step("I check \"ratings_#{x}\"") }
-  #elsif rating_list.split(', ') == []
-  #  assert false
   else
     rating_list.split(', ').each { |x| uncheck("ratings_#{x}") }
   end
- 
 end
+
+# Should and should not see movies with certain ratings.
 
 Then /I should( not)? see movies with ratings: (.*)/ do |shnot, rating_list|
 
   if !shnot
     x = rating_list.split(', ')
     all('tr/td[2]').each { |td| x.should include td.text }
+    #rating_list.split(', ').each do |x|
+    #  debugger
+    #  find('tr/td[2]', :text => "\n#{x}\n") 
+    #end
   else
     x = rating_list.split(', ') 
     all('#movies tr/td[2]').each { |td| x.should_not include td.text }
