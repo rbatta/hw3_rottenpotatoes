@@ -38,17 +38,15 @@ Then /I should( not)? see movies with ratings: (.*)/ do |shnot, rating_list|
   if !shnot
     x = rating_list.split(', ')
     all('tr/td[2]').each { |td| x.should include td.text }
-    #rating_list.split(', ').each do |x|
-    #  debugger
-    #  find('tr/td[2]', :text => "\n#{x}\n") 
-    #end
   else
-    x = rating_list.split(', ') 
-    all('#movies tr/td[2]').each { |td| x.should_not include td.text }
+    #x = rating_list.split(', ') 
+    #all('#movies tr/td[2]').each { |td| x.should_not include td.text }
+    rating_list.split(', ').each do |x|
+      page.should have_no_content("\n#{x}\n")
+    end
   end
   # incl/exc the values of ratings from the list that i want
   # must be array because include searches the text of a string and not each element
-
 end
 
 Then /^I should see all movies/ do
