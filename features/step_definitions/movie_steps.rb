@@ -22,9 +22,14 @@ end
 #  "When I check the following ratings: G"
 
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-
+  #debugger
+  if page.all('tbody/tr').count == 0
+    flunk
+  end
   if !uncheck
     rating_list.split(', ').each { |x| step("I check \"ratings_#{x}\"") }
+  #elsif rating_list.split(', ') == []
+  #  assert false
   else
     rating_list.split(', ').each { |x| uncheck("ratings_#{x}") }
   end
@@ -45,7 +50,9 @@ Then /I should( not)? see movies with ratings: (.*)/ do |shnot, rating_list|
 
 end
 
-
+Then /^I should see all movies/ do
+  assert page.all('#movies tbody/tr').count.should eql(Movie.all.count)
+end
 #page.find(:xpath, '//tr', :text => e1)
 #x = find("tr", :text => e1)
 #y = find("tr", :text => e2)
@@ -55,4 +62,5 @@ end
 #movies.index(e1)
 #idx = movies.index(e1)
 # movies[idx+1].should eql(e2)
+
 #page.all('#movies tbody/tr').count.should == Movie.count #eql(Movie.all.count) works?
