@@ -45,6 +45,7 @@ Then /I should( not)? see movies with ratings: (.*)/ do |shnot, rating_list|
 
 end
 
+
 #page.find(:xpath, '//tr', :text => e1)
 #x = find("tr", :text => e1)
 #y = find("tr", :text => e2)
