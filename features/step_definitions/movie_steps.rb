@@ -13,6 +13,10 @@ Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   x = find("tr", :text => e1)
   y = find("tr", :text => e2)
   assert x.path.match(/\d/)[0] < y.path.match(/\d/)[0]
+
+  #movies = all('tr/td').map(&:text)
+  #movies.index(e1).should be < movies.index(e2)
+  #.should.be.< (or .should(be(<)) )
 end
 
 # Make it easier to express checking or unchecking several boxes at once
